@@ -13,7 +13,7 @@ class DatabaseConnection:
     def close(self):
         if not self.open_connection:
             return
-        self.open_connection.close()
+        self.open_connection.connection.close()
         self.open_connection = None
 
     @contextmanager
@@ -23,10 +23,11 @@ class DatabaseConnection:
         if not existing_connection:
             self.open_connection = self.cache.get_database().cursor()
 
-        yield self.open_connection
-
-        if not existing_connection:
-            self.close()
+        try:
+            yield self.open_connection
+        finally:
+            if not existing_connection:
+                self.close()
 
 
 class DatabaseAccess:
