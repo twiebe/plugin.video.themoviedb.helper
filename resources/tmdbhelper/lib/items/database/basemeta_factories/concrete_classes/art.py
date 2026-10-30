@@ -45,7 +45,7 @@ class ArtProfile(ArtPoster):
         return (self.item_id, 'profiles')
 
     def image_path_func(self, v):
-        return self.common_apis.tmdb_imagepath.get_imagepath_poster(v)
+        return self.common_apis.tmdb_imagepath.get_imagepath_profile(v)
 
     def get_cached_data(self):
         return self.get_cached_data_by_null()
