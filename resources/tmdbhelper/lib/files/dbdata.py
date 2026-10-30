@@ -130,6 +130,12 @@ class DatabaseCore:
         except Exception as database_exception:
             self.kodi_log(f'CACHE: database GET DATABASE ERROR! -- {database_exception}\n{self._sc_name} -- read_only: {read_only}', 2)
 
+    @staticmethod
+    def close_cursor(cursor):
+        """ Close a cursor from execute_sql() and the connection it opened for it """
+        cursor.close()
+        cursor.connection.close()
+
     @property
     def database_tables(self):
         return {}
@@ -285,7 +291,7 @@ class DatabaseMethod:
             values,
             connection=connection)
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
     def get_list_values(self, table=DEFAULT_TABLE, keys=(), values=(), conditions=None, connection=None):
         cursor = self.execute_sql(
@@ -299,7 +305,7 @@ class DatabaseMethod:
 
         data = cursor.fetchall()
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
         return data
 
@@ -309,7 +315,7 @@ class DatabaseMethod:
             data=values,
             connection=connection)
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
     def set_or_update_null_list_values(self, table=DEFAULT_TABLE, keys=(), values=(), conflict_constraint='id', connection=None):
         if not values:
@@ -320,7 +326,7 @@ class DatabaseMethod:
             values,
             connection=connection)
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
     def get_values(self, table=DEFAULT_TABLE, item_id=None, keys=(), connection=None):
         cursor = self.execute_sql(
@@ -334,7 +340,7 @@ class DatabaseMethod:
 
         data = cursor.fetchone()
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
         return data
 
@@ -350,7 +356,7 @@ class DatabaseMethod:
             data=(*values, item_id, ),
             connection=connection)
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
     def set_many_values(self, table=DEFAULT_TABLE, keys=(), data=None, connection=None):
         """ data={item_id: ((key, value), (key, value))} """
@@ -366,7 +372,7 @@ class DatabaseMethod:
             data=[(*values, item_id, ) for item_id, values in data.items()],
             connection=connection)
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
     def del_column_values(self, table=DEFAULT_TABLE, keys=(), item_type=None, connection=None):
         cursor = self.execute_sql(
@@ -376,7 +382,7 @@ class DatabaseMethod:
             data=None if item_type is None else (item_type, ),
             connection=connection)
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
     def del_item(self, table=DEFAULT_TABLE, item_id=None, connection=None):
         cursor = self.execute_sql(
@@ -384,7 +390,7 @@ class DatabaseMethod:
             data=(item_id, ),
             connection=connection)
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
     def del_item_like(self, table=DEFAULT_TABLE, item_id=None, connection=None):
         cursor = self.execute_sql(
@@ -392,7 +398,7 @@ class DatabaseMethod:
             data=(item_id, ),
             connection=connection)
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
     def create_item(self, table=DEFAULT_TABLE, item_id=None, connection=None):
         cursor = self.execute_sql(
@@ -400,7 +406,7 @@ class DatabaseMethod:
             data=(item_id,),
             connection=connection)
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
     def create_many_items(self, table=DEFAULT_TABLE, item_ids=(), connection=None):
         cursor = self.execute_sql(
@@ -408,7 +414,7 @@ class DatabaseMethod:
             data=[(item_id,) for item_id in item_ids],
             connection=connection)
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
 
 class Database(DatabaseCore, DatabaseMethod):
