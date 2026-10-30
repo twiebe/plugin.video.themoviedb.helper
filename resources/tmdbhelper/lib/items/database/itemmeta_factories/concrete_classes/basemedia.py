@@ -484,7 +484,7 @@ class MediaItem(BaseItem):
                 'name': i['name'],
                 'role': i['role'],
                 'order': i['ordering'] or 999999,
-                'thumbnail': self.parent_db_cache.common_apis.tmdb_imagepath.get_imagepath_poster(i['thumb'])
+                'thumbnail': self.parent_db_cache.common_apis.tmdb_imagepath.get_imagepath_profile(i['thumb'])
             }
             for i in self.return_basemeta_db('castmember').cached_data
         ]
