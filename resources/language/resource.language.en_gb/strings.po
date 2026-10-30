@@ -3507,3 +3507,23 @@ msgstr ""
 msgctxt "#32755"
 msgid "Choose the resolution of TMDb fanart, landscape, and extra fanart, or use the default image quality setting."
 msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32757"
+msgid "Person image size"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32758"
+msgid "Small"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32759"
+msgid "Same as posters"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32760"
+msgid "Choose the size of cast and crew photos. Auto uses small photos when Kodi renders its interface at 1080 lines or less, and the poster quality above that."
+msgstr ""
