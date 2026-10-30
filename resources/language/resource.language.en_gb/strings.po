@@ -2927,3 +2927,23 @@ msgstr ""
 msgctxt "#32607"
 msgid "Drop collection"
 msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32608"
+msgid "Person image size"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32609"
+msgid "Small"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32610"
+msgid "Same as posters"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32611"
+msgid "Size of cast and crew photos. Small images look sharper in cast lists when Kodi renders its interface at 1080 lines or less. Auto uses small images at that resolution and the poster quality above it."
+msgstr ""
