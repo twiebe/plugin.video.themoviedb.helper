@@ -51,6 +51,7 @@ IMAGEPATH_BASICPOSTER = 'https://image.tmdb.org/t/p/w500'
 IMAGEPATH_SMALLPOSTER = 'https://image.tmdb.org/t/p/w342'
 IMAGEPATH_SMALLPROFILE = 'https://image.tmdb.org/t/p/w185'
 IMAGEPATH_SMALLPROFILE_MAXHEIGHT = 1080  # Auto uses small person images when Kodi renders the GUI at this height or lower
+IMAGEPATH_SMALLPOSTER_MAXHEIGHT = 1080  # Auto uses small posters when Kodi renders the GUI at this height or lower
 IMAGEPATH_LARGELOGO = 'https://image.tmdb.org/t/p/w500'
 IMAGEPATH_SMALLLOGO = 'https://image.tmdb.org/t/p/w300'
 IMAGEPATH_NEGATE = 'https://image.tmdb.org/t/p/h100_filter(negate,000,666)'

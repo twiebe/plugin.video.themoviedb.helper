@@ -3587,3 +3587,23 @@ msgstr ""
 msgctxt "#32739"
 msgid "Choose the size of cast and crew photos. Auto uses small photos when Kodi renders its interface at 1080 lines or less, and the poster quality above that."
 msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32740"
+msgid "Poster image size"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32741"
+msgid "Small"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32742"
+msgid "Same as artwork quality"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32743"
+msgid "Choose the size of posters. Auto uses small posters when Kodi renders its interface at 1080 lines or less, and the image quality above that."
+msgstr ""
