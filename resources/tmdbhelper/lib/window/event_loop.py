@@ -53,6 +53,20 @@ class EventLoop():
         self.set_properties(self.position, window.get_property(name))
         kodi_log(f'Window Manager [EVENTS] _on_rem [X]', 2)
 
+    def _rem_paths_after(self, position):
+        for i in range(self.position, position, -1):
+            window.get_property(f'{PREFIX_PATH}{i}', clear_property=True)
+
+    def _on_first(self):
+        kodi_log(f'Window Manager [EVENTS] _on_first [ ]', 2)
+        window.get_property(PREFIX_COMMAND, clear_property=True)
+        if self.position < 2:
+            return
+        self._rem_paths_after(1)
+        self.set_properties(1, window.get_property(f'{PREFIX_PATH}1'))
+        self.current_path = None  # Reopen the first page even if a later page showed the same item
+        kodi_log(f'Window Manager [EVENTS] _on_first [X]', 2)
+
     def _on_back(self):
         kodi_log(f'Window Manager [EVENTS] _on_back [ ]', 2)
         name = f'{PREFIX_PATH}{self.position}'
@@ -177,6 +191,11 @@ class EventLoop():
             if window.get_property(PREFIX_COMMAND) == 'exit':
                 self._call_exit()
                 break
+
+            # Return to first page called so let's go back to it
+            if window.get_property(PREFIX_COMMAND) == 'first':
+                self._on_first()
+                continue
 
             # Path changed so let's update
             if self.current_path != self.added_path:
