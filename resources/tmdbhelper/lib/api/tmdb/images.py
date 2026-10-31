@@ -9,9 +9,44 @@ class TMDbImagePath:
         return get_setting('artwork_quality', 'int')
 
     @cached_property
-    def artwork_quality_poster(self):
+    def poster_quality(self):
+        from tmdbhelper.lib.addon.plugin import get_setting
+        return get_setting('poster_quality', 'int')
+
+    @cached_property
+    def screen_height(self):
+        from xbmcgui import getScreenHeight
+        return getScreenHeight()
+
+    @cached_property
+    def artwork_quality_poster_artwork(self):
         from tmdbhelper.lib.addon.consts import IMAGEPATH_QUALITY_POSTER
         return IMAGEPATH_QUALITY_POSTER[self.artwork_quality]
+
+    @cached_property
+    def artwork_quality_poster_small(self):
+        from tmdbhelper.lib.addon.consts import IMAGEPATH_SMALLPOSTER
+        return IMAGEPATH_SMALLPOSTER
+
+    @cached_property
+    def artwork_quality_poster_auto(self):
+        return self.get_artwork_quality_poster_auto()
+
+    def get_artwork_quality_poster_auto(self):
+        from tmdbhelper.lib.addon.consts import IMAGEPATH_SMALLPOSTER_MAXHEIGHT
+        if self.screen_height > IMAGEPATH_SMALLPOSTER_MAXHEIGHT:
+            return self.artwork_quality_poster_artwork
+        return self.artwork_quality_poster_small
+
+    poster_quality_attributes = (
+        'artwork_quality_poster_auto',
+        'artwork_quality_poster_small',
+        'artwork_quality_poster_artwork',
+    )
+
+    @cached_property
+    def artwork_quality_poster(self):
+        return getattr(self, self.poster_quality_attributes[self.poster_quality])
 
     @cached_property
     def artwork_quality_fanart(self):

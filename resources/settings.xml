@@ -346,6 +346,18 @@
                     <default>false</default>
                     <control type="toggle"/>
                 </setting>
+                <setting id="poster_quality" type="integer" label="32740" help="32743">
+                    <level>0</level>
+                    <default>0</default>
+                    <constraints>
+                        <options>
+                            <option label="16316">0</option>
+                            <option label="32741">1</option>
+                            <option label="32742">2</option>
+                        </options>
+                    </constraints>
+                    <control type="spinner" format="string"/>
+                </setting>
             </group>
             <group id="2" label="32717">
                 <setting id="fanarttv_lookup" type="boolean" label="32021" help="32636">
