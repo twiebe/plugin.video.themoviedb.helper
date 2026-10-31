@@ -3622,3 +3622,23 @@ msgstr ""
 msgctxt "#32746"
 msgid "Disabling this module will remove it from:\n{0}"
 msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32751"
+msgid "Poster image size"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32752"
+msgid "Small"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32753"
+msgid "Same as artwork quality"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32754"
+msgid "Choose the size of posters. Auto uses small posters when Kodi renders its interface at 1080 lines or less, and the image quality above that."
+msgstr ""
