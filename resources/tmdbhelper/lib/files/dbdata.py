@@ -4,6 +4,7 @@ from tmdbhelper.lib.addon.logger import kodi_log, TimerFunc
 from tmdbhelper.lib.addon.plugin import get_setting, get_version
 from tmdbhelper.lib.files.futils import FileUtils
 import sqlite3
+import sys
 
 
 DEFAULT_TABLE = 'simplecache'
@@ -15,6 +16,10 @@ class DatabaseCore:
     _fileutils = FileUtils()  # Import to use plugin addon_data folder not the module one
     _db_timeout = 60.0
     _db_read_timeout = 1.0
+    # Each connection maps the database file separately. A 32-bit Kodi process has only
+    # 4 GiB of address space, so a few concurrent connections to a large cache leave no
+    # room for Kodi's own buffers (video playback fails). Only use mmap on 64-bit.
+    _db_mmap_size = 268435456 if sys.maxsize > 2**32 else 0
     database_version = 1
     database_changes = {}
 
@@ -71,7 +76,7 @@ class DatabaseCore:
         cursor.execute("PRAGMA synchronous=NORMAL")
         cursor.execute("PRAGMA journal_mode=WAL")
         cursor.execute("PRAGMA foreign_keys=ON")
-        cursor.execute("PRAGMA mmap_size=268435456")
+        cursor.execute(f"PRAGMA mmap_size={self._db_mmap_size}")
         return connection
 
     def init_database(self):
@@ -126,6 +131,12 @@ class DatabaseCore:
                 return self.database_execute(connection, query, data=data)
         except Exception as database_exception:
             self.kodi_log(f'CACHE: database GET DATABASE ERROR! -- {database_exception}\n{self._sc_name} -- read_only: {read_only}', 2)
+
+    @staticmethod
+    def close_cursor(cursor):
+        """ Close a cursor from execute_sql() and the connection it opened for it """
+        cursor.close()
+        cursor.connection.close()
 
     @property
     def database_tables(self):
@@ -282,7 +293,7 @@ class DatabaseMethod:
             values,
             connection=connection)
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
     def get_list_values(self, table=DEFAULT_TABLE, keys=(), values=(), conditions=None, connection=None):
         cursor = self.execute_sql(
@@ -296,7 +307,7 @@ class DatabaseMethod:
 
         data = cursor.fetchall()
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
         return data
 
@@ -306,7 +317,7 @@ class DatabaseMethod:
             data=values,
             connection=connection)
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
     def set_or_update_null_list_values(self, table=DEFAULT_TABLE, keys=(), values=(), conflict_constraint='id', connection=None):
         if not values:
@@ -317,7 +328,7 @@ class DatabaseMethod:
             values,
             connection=connection)
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
     def get_values(self, table=DEFAULT_TABLE, item_id=None, keys=(), connection=None):
         cursor = self.execute_sql(
@@ -331,7 +342,7 @@ class DatabaseMethod:
 
         data = cursor.fetchone()
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
         return data
 
@@ -347,7 +358,7 @@ class DatabaseMethod:
             data=(*values, item_id, ),
             connection=connection)
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
     def set_many_values(self, table=DEFAULT_TABLE, keys=(), data=None, connection=None):
         """ data={item_id: ((key, value), (key, value))} """
@@ -363,7 +374,7 @@ class DatabaseMethod:
             data=[(*values, item_id, ) for item_id, values in data.items()],
             connection=connection)
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
     def del_column_values(self, table=DEFAULT_TABLE, keys=(), item_type=None, connection=None):
         cursor = self.execute_sql(
@@ -373,7 +384,7 @@ class DatabaseMethod:
             data=None if item_type is None else (item_type, ),
             connection=connection)
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
     def del_item(self, table=DEFAULT_TABLE, item_id=None, connection=None):
         cursor = self.execute_sql(
@@ -381,7 +392,7 @@ class DatabaseMethod:
             data=(item_id, ),
             connection=connection)
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
     def del_item_like(self, table=DEFAULT_TABLE, item_id=None, connection=None):
         cursor = self.execute_sql(
@@ -389,7 +400,7 @@ class DatabaseMethod:
             data=(item_id, ),
             connection=connection)
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
     def create_item(self, table=DEFAULT_TABLE, item_id=None, connection=None):
         cursor = self.execute_sql(
@@ -397,7 +408,7 @@ class DatabaseMethod:
             data=(item_id,),
             connection=connection)
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
     def create_many_items(self, table=DEFAULT_TABLE, item_ids=(), connection=None):
         cursor = self.execute_sql(
@@ -405,7 +416,7 @@ class DatabaseMethod:
             data=[(item_id,) for item_id in item_ids],
             connection=connection)
         if not connection and cursor:
-            cursor.close()
+            self.close_cursor(cursor)
 
 
 class Database(DatabaseCore, DatabaseMethod):
