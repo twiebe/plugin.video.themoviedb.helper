@@ -3622,3 +3622,23 @@ msgstr ""
 msgctxt "#32746"
 msgid "Disabling this module will remove it from:\n{0}"
 msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32747"
+msgid "Person image size"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32748"
+msgid "Small"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32749"
+msgid "Same as posters"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32750"
+msgid "Choose the size of cast and crew photos. Auto uses small photos when Kodi renders its interface at 1080 lines or less, and the poster quality above that."
+msgstr ""

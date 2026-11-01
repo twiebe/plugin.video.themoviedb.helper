@@ -18,7 +18,7 @@ class CastMember(ItemDetailsList):
     )
 
     def image_path_func(self, v):
-        return self.common_apis.tmdb_imagepath.get_imagepath_poster(v)
+        return self.common_apis.tmdb_imagepath.get_imagepath_profile(v)
 
     @property
     def cached_data_table(self):
