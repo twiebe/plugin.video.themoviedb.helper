@@ -3509,6 +3509,11 @@ msgid "Choose the resolution of TMDb fanart, landscape, and extra fanart, or use
 msgstr ""
 
 #: /resources/settings.xml
+msgctxt "#32756"
+msgid "Choose the resolution of TMDb posters, or use the default image quality setting. Auto uses low quality posters when Kodi renders its interface at 1080 lines or less, and the default image quality above that."
+msgstr ""
+
+#: /resources/settings.xml
 msgctxt "#32757"
 msgid "Person image size"
 msgstr ""
