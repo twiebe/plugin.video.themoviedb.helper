@@ -9,8 +9,55 @@ class CrewMemberMediaList(CastMemberMediaList):
     group_by = 'crewmember.tmdb_id'
     keys = ('GROUP_CONCAT(role, " / ") as role', 'department', 'appearances', 'parent_id')
 
-    sort_by_fallback = None
     order_by_direction_fallback = 'ASC'
+
+    # Jobs listed first, one tuple per rank: writers, directors, then producers by seniority
+    crew_order_roles = (
+        (
+            'Writer', 'Screenplay', 'Teleplay', 'Story', 'Original Story', 'Novel', 'Author',
+            'Book', 'Short Story', 'Comic Book', 'Graphic Novel', 'Characters', 'Theatre Play',
+            'Musical', 'Original Concept', 'Idea', 'Adaptation', 'Co-Writer', 'Creator',
+            'Original Series Creator'),
+        ('Director',),
+        ('Co-Director',),
+        ('Producer',),
+        ('Executive Producer',),
+        (
+            'Co-Producer', 'Co-Executive Producer', 'Associate Producer', 'Line Producer',
+            'Supervising Producer', 'Consulting Producer', 'Coordinating Producer'),
+    )
+
+    # Everyone else by department, then job
+    crew_order_departments = (
+        'Directing', 'Writing', 'Production', 'Camera', 'Editing', 'Sound', 'Art',
+        'Costume & Make-Up', 'Visual Effects', 'Lighting', 'Crew',
+    )
+
+    @staticmethod
+    def get_sql_strings(values):
+        return ', '.join(f"'{v}'" for v in values)
+
+    def get_crew_order_role_ranks(self):
+        return ' '.join(
+            f"WHEN role IN ({self.get_sql_strings(roles)}) THEN '{x:02d}'"
+            for x, roles in enumerate(self.crew_order_roles))
+
+    def get_crew_order_department_ranks(self):
+        return ' '.join(
+            f"WHEN '{department}' THEN '{x:02d}'"
+            for x, department in enumerate(self.crew_order_departments))
+
+    def get_crew_order_key(self):
+        """ Text key of a job: its rank, or department and job for the rest, then the name """
+        return (
+            f'CASE {self.get_crew_order_role_ranks()} '
+            f"ELSE '99' || CASE department {self.get_crew_order_department_ranks()} ELSE '99' END || LOWER(role) "
+            f'END || CHAR(1) || LOWER(creditedperson.name)')
+
+    @cached_property
+    def sort_by_fallback(self):
+        """ A person with several jobs sorts by their highest ranked job """
+        return f'MIN({self.get_crew_order_key()})'
 
     filter_key_map = {
         'role': 'role',
