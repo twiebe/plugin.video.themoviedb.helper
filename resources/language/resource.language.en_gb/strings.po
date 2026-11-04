@@ -3522,3 +3522,8 @@ msgstr ""
 msgctxt "#32758"
 msgid "Sign out of your TMDb account and remove the saved authentication token."
 msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32904"
+msgid "Choose the resolution of TMDb posters, or use the default image quality setting. Auto uses low quality posters when Kodi renders its interface at 1080 lines or less, and the default image quality above that."
+msgstr ""
