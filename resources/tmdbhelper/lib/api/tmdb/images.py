@@ -14,9 +14,26 @@ class TMDbImagePath:
         return self.artwork_quality if quality == -1 else quality
 
     @cached_property
+    def screen_height(self):
+        from xbmcgui import getScreenHeight
+        return getScreenHeight()
+
+    def get_artwork_quality_poster_auto(self):
+        from tmdbhelper.lib.addon.consts import IMAGEPATH_QUALITY_POSTER, IMAGEPATH_SMALLPOSTER, IMAGEPATH_SMALLPOSTER_MAXHEIGHT
+        if self.screen_height > IMAGEPATH_SMALLPOSTER_MAXHEIGHT:
+            return IMAGEPATH_QUALITY_POSTER[self.artwork_quality]
+        return IMAGEPATH_SMALLPOSTER
+
+    def get_artwork_quality_poster(self):
+        from tmdbhelper.lib.addon.consts import IMAGEPATH_QUALITY_POSTER, IMAGEPATH_QUALITY_POSTER_AUTO
+        quality = self.get_artwork_quality('poster')
+        if quality == IMAGEPATH_QUALITY_POSTER_AUTO:
+            return self.get_artwork_quality_poster_auto()
+        return IMAGEPATH_QUALITY_POSTER[quality]
+
+    @cached_property
     def artwork_quality_poster(self):
-        from tmdbhelper.lib.addon.consts import IMAGEPATH_QUALITY_POSTER
-        return IMAGEPATH_QUALITY_POSTER[self.get_artwork_quality('poster')]
+        return self.get_artwork_quality_poster()
 
     @cached_property
     def artwork_quality_fanart(self):
@@ -37,11 +54,6 @@ class TMDbImagePath:
     def profile_quality(self):
         from tmdbhelper.lib.addon.plugin import get_setting
         return get_setting('profile_quality', 'int')
-
-    @cached_property
-    def screen_height(self):
-        from xbmcgui import getScreenHeight
-        return getScreenHeight()
 
     @cached_property
     def artwork_quality_profile_small(self):
