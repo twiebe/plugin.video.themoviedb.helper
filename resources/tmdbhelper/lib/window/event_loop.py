@@ -9,6 +9,7 @@ from tmdbhelper.lib.window.constants import (
     PREFIX_INSTANCE,
     PREFIX_ADDPATH,
     PREFIX_PATH,
+    PREFIX_POSITION_SEEN,
     CONTAINER_ID,
     PREFIX_COMMAND
 )
@@ -179,6 +180,9 @@ class EventLoop():
         # Set first_run to False because we've now finished our first run through
         self.current_path = self.added_path
         self.first_run = False
+
+        # Tell the skin we've seen the page at this position: closing it is now safe
+        window.get_property(PREFIX_POSITION_SEEN, set_property=self.position)
 
     def event_poll(self):
         while not self.exit and not self.xbmc_monitor.abortRequested():
