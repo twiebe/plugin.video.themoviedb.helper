@@ -3,6 +3,7 @@ PREFIX_QUERY = 'Query'
 PREFIX_CURRENT = 'Path.Current'
 PREFIX_ADDPATH = 'Path.To.Add'
 PREFIX_POSITION = 'Position'
+PREFIX_POSITION_SEEN = 'Position.Seen'
 PREFIX_INSTANCE = 'Instance'
 PREFIX_COMMAND = 'Command'
 ID_VIDEOINFO = 12003
