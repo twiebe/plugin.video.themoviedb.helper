@@ -88,7 +88,8 @@ class DatabaseCore:
             #     return
             database = self.create_database()
             self.set_database_init()
-        return database
+        if database:
+            database.close()
 
     def create_database(self):
         try:
@@ -97,6 +98,7 @@ class DatabaseCore:
                 connection = sqlite3.connect(self._db_file, timeout=self._db_timeout)
                 connection = self.set_pragmas(connection)
                 connection = self.create_database_execute(connection)
+                connection.commit()
             return connection
         except Exception as error:
             self.kodi_log(f'CACHE: Exception while initializing _database: {error}\n{self._sc_name}', 1)
