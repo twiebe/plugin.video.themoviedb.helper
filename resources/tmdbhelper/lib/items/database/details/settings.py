@@ -23,7 +23,7 @@ class DetailsSettings:
     # Settings that only change online lookups are not needed: saves replace stored copies.
     stored_metadata_settings = (
         'language',
-        'artwork_quality', 'artwork_quality_poster', 'artwork_quality_fanart',
+        'artwork_quality', 'artwork_quality_poster', 'artwork_quality_fanart', 'profile_quality',
         'fanarttv_lookup', 'fanarttv_prefer',
         'language_lookup', 'regional_prefer',
         'mpaa_prefix',
