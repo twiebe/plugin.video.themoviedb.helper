@@ -61,7 +61,7 @@ class ItemMapper(_ItemMapper, ItemMapperMethods):
             }],
             'profile_path': [{
                 'keys': [('art', 'thumb')],
-                'func': self.tmdb_imagepath.get_imagepath_poster
+                'func': self.tmdb_imagepath.get_imagepath_profile
             }],
             'file_path': [{
                 'keys': [('art', 'thumb')],

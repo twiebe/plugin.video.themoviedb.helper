@@ -34,6 +34,41 @@ class TMDbImagePath:
         return IMAGEPATH_QUALITY_CLOGOS[self.artwork_quality]
 
     @cached_property
+    def profile_quality(self):
+        from tmdbhelper.lib.addon.plugin import get_setting
+        return get_setting('profile_quality', 'int')
+
+    @cached_property
+    def screen_height(self):
+        from xbmcgui import getScreenHeight
+        return getScreenHeight()
+
+    @cached_property
+    def artwork_quality_profile_small(self):
+        from tmdbhelper.lib.addon.consts import IMAGEPATH_SMALLPROFILE
+        return IMAGEPATH_SMALLPROFILE
+
+    @cached_property
+    def artwork_quality_profile_auto(self):
+        return self.get_artwork_quality_profile_auto()
+
+    def get_artwork_quality_profile_auto(self):
+        from tmdbhelper.lib.addon.consts import IMAGEPATH_SMALLPROFILE_MAXHEIGHT
+        if self.screen_height > IMAGEPATH_SMALLPROFILE_MAXHEIGHT:
+            return self.artwork_quality_poster
+        return self.artwork_quality_profile_small
+
+    profile_quality_attributes = (
+        'artwork_quality_profile_auto',
+        'artwork_quality_profile_small',
+        'artwork_quality_poster',
+    )
+
+    @cached_property
+    def artwork_quality_profile(self):
+        return getattr(self, self.profile_quality_attributes[self.profile_quality])
+
+    @cached_property
     def artwork_quality_origin(self):
         from tmdbhelper.lib.addon.consts import IMAGEPATH_ORIGINAL
         return IMAGEPATH_ORIGINAL
@@ -47,6 +82,11 @@ class TMDbImagePath:
         if not v:
             return ''
         return f'{self.artwork_quality_poster}{v}'
+
+    def get_imagepath_profile(self, v):
+        if not v:
+            return ''
+        return f'{self.artwork_quality_profile}{v}'
 
     def get_imagepath_fanart(self, v):
         if not v:

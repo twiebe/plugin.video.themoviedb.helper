@@ -68,6 +68,9 @@ class CastMemberMediaList(MediaList):
             'tmdb_type': 'person',
         }
 
+    def image_path_func(self, v):
+        return self.common_apis.tmdb_imagepath.get_imagepath_profile(v)
+
     def map_item_art(self, i):
         return {
             'thumb': self.image_path_func(i['thumb'])

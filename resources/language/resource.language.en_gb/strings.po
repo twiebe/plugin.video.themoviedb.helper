@@ -3573,3 +3573,23 @@ msgstr ""
 msgctxt "#32770"
 msgid "Browse next episodes"
 msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32900"
+msgid "Person image size"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32901"
+msgid "Small"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32902"
+msgid "Same as posters"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32903"
+msgid "Choose the size of cast and crew photos. Auto uses small photos when Kodi renders its interface at 1080 lines or less, and the poster quality above that."
+msgstr ""
