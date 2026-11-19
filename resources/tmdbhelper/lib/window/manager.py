@@ -14,6 +14,7 @@ from tmdbhelper.lib.window.constants import (
     PREFIX_PATH,
     PREFIX_COMMAND,
     PREFIX_POSITION,
+    PREFIX_POSITION_SEEN,
     PREFIX_CURRENT,
     ID_VIDEOINFO,
     SV_ROUTES
@@ -177,6 +178,7 @@ class WindowManager(EventLoop):
         window.get_property(PREFIX_COMMAND, clear_property=True)
         window.get_property(PREFIX_CURRENT, clear_property=True)
         window.get_property(PREFIX_POSITION, clear_property=True)
+        window.get_property(PREFIX_POSITION_SEEN, clear_property=True)
         window.get_property(f'{PREFIX_PATH}0', clear_property=True)
         window.get_property(f'{PREFIX_PATH}1', clear_property=True)
         kodi_log(f'Window Manager [ACTION] reset_properties', 2)
@@ -184,6 +186,7 @@ class WindowManager(EventLoop):
     def set_properties(self, position=1, path=None):
         self.position = position
         self.added_path = path or ''
+        window.get_property(PREFIX_POSITION_SEEN, clear_property=True)
         window.get_property(PREFIX_CURRENT, set_property=path)
         window.get_property(f'{PREFIX_PATH}{position}', set_property=path)
         window.get_property(PREFIX_POSITION, set_property=position)
