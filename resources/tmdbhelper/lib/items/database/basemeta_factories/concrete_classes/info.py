@@ -69,12 +69,17 @@ class Certification(ItemDetailsList):
 class Video(ItemDetailsList):
     table = 'video'
     keys = tuple(VIDEO_COLUMNS.keys())
-    conditions = 'parent_id=? AND content=? ORDER BY iso_language=? DESC, release_date DESC LIMIT 1'  # WHERE conditions
+    # Official trailers, other trailers, official teasers, other teasers; then language, newest.
+    # Fan re-uploads are often only available as 60p pulldown of 24p trailers on YouTube.
+    conditions = (
+        'parent_id=? AND content IN ("Trailer", "Teaser") '
+        'ORDER BY content="Trailer" DESC, official DESC, iso_language=? DESC, release_date DESC LIMIT 1'
+    )  # WHERE conditions
     conflict_constraint = 'path, parent_id'
 
     @property
     def values(self):  # WHERE conditions values for ?
-        return (self.parent_id, 'Trailer', self.common_apis.tmdb_api.iso_language)
+        return (self.parent_id, self.common_apis.tmdb_api.iso_language)
 
 
 class Translation(ItemDetailsList):

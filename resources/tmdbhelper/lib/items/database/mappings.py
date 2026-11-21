@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from jurialmunkey.ftools import cached_property
 from tmdbhelper.lib.api.mapping import _ItemMapper
-from tmdbhelper.lib.addon.consts import TMDB_ARTWORK_TYPES
+from tmdbhelper.lib.addon.consts import TMDB_ARTWORK_TYPES, SQLITE_TRUE, SQLITE_FALSE
 from collections import namedtuple
 
 
@@ -686,6 +686,7 @@ class ItemMapperMethods:
                 'release_date': get_blanks_none(video['published_at']),
                 'key': get_blanks_none(video['key']),
                 'content': get_blanks_none(video['type']),
+                'official': SQLITE_TRUE if video['official'] else SQLITE_FALSE,
                 'path': f"plugin://plugin.video.youtube/play/?video_id={video['key']}",
             })
         return data
