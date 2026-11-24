@@ -52,10 +52,26 @@ class ItemDetailsDatabase(Database):
 
     def create_database_execute(self, connection):
         with connection:
+            self.undo_fork_version_56(connection)
             return super().create_database_execute(connection)
 
+    @staticmethod
+    def undo_fork_version_56(connection):
+        """Fork 1:6.22.6-2 took version 56 for its own video.official column. The number belongs
+        to upstream: drop the column and go back to 55, so upstream's 56 runs when it comes."""
+        cursor = connection.cursor()
+        if cursor.execute('PRAGMA user_version').fetchone()[0] != 56:
+            return
+        if 'official' not in {row[1] for row in cursor.execute('PRAGMA table_info(video)')}:
+            return
+        try:
+            cursor.execute('ALTER TABLE video DROP COLUMN official')
+        except Exception:  # SQLite before 3.35: the table is a cache, its rows come back on refresh
+            cursor.execute('DROP TABLE video')
+        cursor.execute('PRAGMA user_version = 55')
+
     # DB version must be max of table_version
-    database_version = 56
+    database_version = 55
 
     database_changes = {
         21: (),
@@ -138,10 +154,6 @@ class ItemDetailsDatabase(Database):
         55: (
             # Store ratings as one row per item, provider and key, with each provider's expiry.
             'DROP TABLE IF EXISTS ratings',
-        ),
-        56: (
-            # Store the official flag of videos. Existing rows are filled when their item refreshes.
-            'ALTER TABLE video ADD COLUMN official INTEGER',
         ),
     }
 
