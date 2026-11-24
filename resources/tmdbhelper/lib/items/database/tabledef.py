@@ -517,9 +517,6 @@ VIDEO_COLUMNS = {
         'data': 'TEXT',
         'indexed': True,
     },
-    'official': {
-        'data': 'INTEGER',
-    },
     'parent_id': {
         'data': 'TEXT',
         'foreign_key': 'baseitem(id)',

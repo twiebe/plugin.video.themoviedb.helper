@@ -55,7 +55,7 @@ class ItemDetailsDatabase(Database):
             return super().create_database_execute(connection)
 
     # DB version must be max of table_version
-    database_version = 56
+    database_version = 55
 
     database_changes = {
         21: (),
@@ -138,10 +138,6 @@ class ItemDetailsDatabase(Database):
         55: (
             # Store ratings as one row per item, provider and key, with each provider's expiry.
             'DROP TABLE IF EXISTS ratings',
-        ),
-        56: (
-            # Store the official flag of videos. Existing rows are filled when their item refreshes.
-            'ALTER TABLE video ADD COLUMN official INTEGER',
         ),
     }
 
